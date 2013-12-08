@@ -33,7 +33,8 @@
 (def TodoApp
   (React/createClass
     (js-obj
-      "getInitialState" #(js-obj "items" (array) "text" "")
+      "getInitialState" #(js-obj "items" (array)
+                                 "text" "")
 
       "onChange"
       (fn [e]
