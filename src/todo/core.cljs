@@ -14,8 +14,7 @@
 
 (def TodoList
   (React/createClass
-    (js-obj
-      "render" render-todo-list)))
+    (js-obj "render" render-todo-list)))
 
 (defn render-todo-app
   []
