@@ -17,3 +17,8 @@ To develop run:
 ``` sh
 lein cljsbuild auto todo
 ```
+
+[1]: http://clojure.org/
+[2]: https://github.com/clojure/clojurescript
+[3]: http://facebook.github.io/react/
+[4]: https://github.com/technomancy/leiningen
