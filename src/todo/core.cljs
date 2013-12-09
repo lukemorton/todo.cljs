@@ -1,12 +1,10 @@
 (ns todo.core
   (:require React))
 
-(defn render-todo-list-item
-  [item]
+(defn render-todo-list-item [item]
   (React/DOM.li nil item))
 
-(defn render-todo-list
-  []
+(defn render-todo-list []
   (this-as this
     (React/DOM.ul nil
       (into-array
@@ -16,8 +14,7 @@
   (React/createClass
     (js-obj "render" render-todo-list)))
 
-(defn render-todo-app
-  []
+(defn render-todo-app []
   (this-as this
     (React/DOM.div nil
       (array
