@@ -18,7 +18,7 @@
   (this-as this
     (React/DOM.div nil
       (array
-        (React/DOM.h3 nil "TODO")
+        (React/DOM.h1 nil "TODO")
         (TodoList (js-obj "items" (.. this -state -items)))
         (React/DOM.form (js-obj "onSubmit" #(.handleSubmit this %))
           (array
