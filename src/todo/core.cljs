@@ -38,8 +38,8 @@
 
       "handleSubmit"
       (fn [e]
+        (.preventDefault e)
         (this-as this
-          (.preventDefault e)
           (let [items (.. this -state -items)
                 newItem (.. this -state -text)
                 newItems (.concat items (array newItem))]
