@@ -43,8 +43,7 @@
           (let [items (.. this -state -items)
                 newItem (.. this -state -text)
                 newItems (.concat items (array newItem))]
-            (.setState this (js-obj "items" newItems
-                                    "text" "")))))
+            (.setState this (js-obj "items" newItems "text" "")))))
 
       "render" render-todo-app)))
 
