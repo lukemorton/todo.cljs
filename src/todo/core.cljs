@@ -1,50 +1,35 @@
 (ns todo.core
-  (:require React))
+  (:require [react-cljs.dom :as dom]
+            [react-cljs.component :refer [create render event-handler]]))
 
-(defn render-todo-list-item [item]
-  (React/DOM.li nil item))
+(defn render-todo-list [component props state]
+  (dom/ul nil (map #(dom/li nil %) (props :items))))
 
-(defn render-todo-list []
-  (this-as this
-    (React/DOM.ul nil
-      (into-array
-        (map #(render-todo-list-item %) (.. this -props -items))))))
+(def todo-list (create {:render render-todo-list}))
 
-(def TodoList
-  (React/createClass
-    (js-obj "render" render-todo-list)))
+(defn on-submit [e set-state]
+  (.preventDefault e)
+  (set-state
+    (fn [state]
+      (let [items (conj (state :items) (state :text))]
+        {:items items :text ""}))))
 
-(defn render-todo-app []
-  (this-as this
-    (React/DOM.div nil
-      (array
-        (React/DOM.h1 nil "TODO")
-        (TodoList (js-obj "items" (.. this -state -items)))
-        (React/DOM.form (js-obj "onSubmit" #(.handleSubmit this %))
-          (array
-            (React/DOM.input (js-obj "onChange" #(.onChange this %)
-                                     "value" (.. this -state -text)))
-            (React/DOM.button nil (str "Add #" (+ (.. this -state -items -length) 1)))))))))
+(defn on-change [e set-state]
+  (set-state (fn [] {:text (.. e -target -value)})))
 
-(def TodoApp
-  (React/createClass
-    (js-obj
-      "getInitialState" #(js-obj "items" (array) "text" "")
+(defn initial-state [] {:items [] :text ""})
 
-      "onChange"
-      (fn [e]
-        (this-as this
-          (.setState this (js-obj "text" (.. e -target -value)))))
+(defn render-todo-app [component props state]
+  (dom/div nil
+    [(dom/h1 nil "TODO")
+     (todo-list {:items (state :items)})
+     (dom/form {:onSubmit (event-handler component on-submit)}
+       [(dom/input {:onChange (event-handler component on-change)
+                    :value (state :text)})
+        (dom/button nil (str "Add #" (+ (count (state :items)) 1)))])]))
 
-      "handleSubmit"
-      (fn [e]
-        (.preventDefault e)
-        (this-as this
-          (let [items (.. this -state -items)
-                newItem (.. this -state -text)
-                newItems (.concat items (array newItem))]
-            (.setState this (js-obj "items" newItems "text" "")))))
+(def todo-app
+  (create {:get-initial-state initial-state
+           :render render-todo-app}))
 
-      "render" render-todo-app)))
-
-(React/renderComponent (TodoApp nil) js/document.body)
+(render (todo-app) js/document.body)
