@@ -8,12 +8,15 @@
       (clj->js (get-initial-state))
       (js-obj))))
 
+(defn- property->clj [context property-name]
+  (keywordize-keys (js->clj (aget content property-name))))
+
 (defn- wrap-render [render]
   (fn []
     (this-as this
       (render this
-        (keywordize-keys (js->clj (.. this -props)))
-        (keywordize-keys (js->clj (.. this -state)))))))
+        (property->clj this "props")
+        (property->clj this "state")))))
 
 (defn create [{:keys [render get-initial-state]}]
   (React/createClass
@@ -30,7 +33,7 @@
 
 (defn- set-state-fn [context]
   (fn [updater]
-    (let [old-state (keywordize-keys (js->clj (.. context -state)))
+    (let [old-state (property->clj context "state")
           new-state (clj->js (updater old-state))]
       (.setState context new-state))))
 
