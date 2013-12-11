@@ -13,10 +13,10 @@
 
 (defn- wrap-render [render]
   (fn []
-    (this-as this
-      (render this
-        (property->clj this "props")
-        (property->clj this "state")))))
+    (this-as context
+      (render context
+        (property->clj context "props")
+        (property->clj context "state")))))
 
 (defn create [{:keys [render get-initial-state]}]
   (React/createClass
